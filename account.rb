@@ -10,8 +10,12 @@ module Bank
     # A new account should be created with an ID and an initial balance
     def initialize(balance = 0)
       @account_id = rand(100000..999999) #TODO: does not currently ensure unique number.
-      @balance = balance
       # A new account cannot be created with initial negative balance - this will raise an ArgumentError (Google this)
+      if balance >= 0
+        @balance = balance
+      else
+        raise ArgumentError.new("You cannot create an account with a negative balance.")
+      end
     end
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
