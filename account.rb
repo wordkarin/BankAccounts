@@ -26,11 +26,23 @@ module Bank
       if amount > 0 && amount <= @balance
         @balance -= amount
       elsif amount < 0
-        raise ArgumentError.new("You cannot withdraw a negative amount.")
+        begin
+          raise neg_withdraw = ArgumentError.new("You cannot withdraw a negative amount.")
+        rescue
+          puts neg_withdraw.message
+        end
       elsif amount > @balance
-        raise ArgumentError.new("You do not have enough money to withdraw #{amount}.")
+        begin
+          raise amount_exceeds_balance = ArgumentError.new("You do not have enough money to withdraw #{amount}.")
+        rescue
+          puts amount_exceeds_balance.message
+        end
       else
-        raise ArgumentError.new("Withdraws require a non-zero amount.")
+        begin
+          raise zero_amount = ArgumentError.new("Withdraws require a non-zero amount.")
+        rescue
+          puts zero_amount.message
+        end
       end
 
       return @balance
@@ -42,7 +54,11 @@ module Bank
       if amount > 0
         @balance += amount
       else
-        raise ArgumentError.new("Deposits require a positive amount.")
+        begin
+          raise pos_deposit = ArgumentError.new("Deposits require a positive amount.")
+        rescue
+          puts pos_deposit.message
+        end
       end
       return @balance
     end
