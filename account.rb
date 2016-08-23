@@ -1,4 +1,4 @@
-require 'money'
+require 'money' #not using this yet, but should!
 
 # Create a Bank module which will contain your Account class and any future bank account logic.
 module Bank
@@ -22,6 +22,18 @@ module Bank
     def withdraw(amount)
       # The withdraw method does not allow the account to go negative - Will output a warning message and return the original un-modified balance
       # Withdraw should also not accept a negative number as the amount.
+
+      if amount > 0 && amount <= @balance
+        @balance -= amount
+      elsif amount < 0
+        raise ArgumentError.new("You cannot withdraw a negative amount.")
+      elsif amount > @balance
+        raise ArgumentError.new("You do not have enough money to withdraw #{amount}.")
+      else
+        raise ArgumentError.new("Withdraws require a non-zero amount.")
+      end
+
+      return @balance
     end
 
     # Should have a deposit method that accepts a single parameter which represents the amount of money that will be deposited. This method should return the updated account balance.
