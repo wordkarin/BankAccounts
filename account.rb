@@ -1,20 +1,21 @@
 require 'money' #not using this yet, but should!
+require_relative 'owner'
 
 # Create a Bank module which will contain your Account class and any future bank account logic.
 module Bank
   # Create an Account class which should have the following functionality:
   class Account
     # Should be able to access the current balance of an account at any time.
-    attr_reader :account_id, :balance
+    attr_reader :account_id, :balance, :owner_id
 
     # A new account should be created with an ID and an initial balance
     def initialize(balance = 0)
       @account_id = rand(100000..999999) #TODO: does not currently ensure unique number.
-      # A new account cannot be created with initial negative balance - this will raise an ArgumentError (Google this)
-      if balance >= 0
+      if balance >= 0 #TODO: if user enters a non-number for balance, this fails.
         @balance = balance
       else
         begin
+          # A new account cannot be created with initial negative balance - this will raise an ArgumentError
           raise neg_starting_balance = ArgumentError.new("You cannot create an account with a negative balance. Your account was created with a balance of 0. If you meant to create an account with a positive balance, please deposit now.")
         rescue
           puts neg_starting_balance.message
@@ -66,6 +67,11 @@ module Bank
         end
       end
       return @balance
+    end
+
+    # The Account can be created with an owner, OR you can create a method that will add the owner after the Account has already been created.
+    def add_owner(owner)
+        @owner = owner #do I need to figure out how to associate this with the current instance of the account? (would call this method on an account instance.) 
     end
   end
 end
