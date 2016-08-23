@@ -39,6 +39,12 @@ module Bank
     # Should have a deposit method that accepts a single parameter which represents the amount of money that will be deposited. This method should return the updated account balance.
     def deposit(amount)
       #Deposit should not accept a negative number as the amount.
+      if amount > 0
+        @balance += amount
+      else
+        raise ArgumentError.new("Deposits require a positive amount.")
+      end
+      return @balance
     end
   end
 end
