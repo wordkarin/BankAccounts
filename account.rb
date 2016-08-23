@@ -14,7 +14,12 @@ module Bank
       if balance >= 0
         @balance = balance
       else
-        raise ArgumentError.new("You cannot create an account with a negative balance.")
+        begin
+          raise neg_starting_balance = ArgumentError.new("You cannot create an account with a negative balance. Your account was created with a balance of 0. If you meant to create an account with a positive balance, please deposit now.")
+        rescue
+          puts neg_starting_balance.message
+          @balance = 0 #This rescue creates the account object with a zero balance. Maybe want to not create an account if the balance is negative?
+        end
       end
     end
 
