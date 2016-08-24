@@ -1,6 +1,6 @@
 require 'money' #not using this yet, but should!
-require_relative 'owner'
 require 'csv'
+require_relative 'owner'
 
 # Create a Bank module which will contain your Account class and any future bank account logic.
 module Bank
@@ -48,13 +48,13 @@ module Bank
 
     def self.all
       #returns a collection of Account instances, representing all of the Accounts described in the CSV. See below for the CSV file specifications
+      #right now, this just returns those created by the CSV file, but I may want to be able to return all accounts ever created - including those created on their own.
       self.read_accounts_from_file
     end
 
     def self.find(id)
       #returns an instance of Account where the value of the id field in the CSV matches the passed parameter. note: should use self.all method.
-      all_accounts = self.all
-      return all_accounts[id]
+      return self.all[id]
     end
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
