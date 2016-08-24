@@ -12,7 +12,8 @@ module Bank
     # A new account should be created with an ID and an initial balance
     def initialize(account_id, balance = 0)
       # @account_id = rand(100000..999999) #TODO: does not currently ensure unique number. I will probably have the account_id's created somewhere else outside of the initialize method, so that I can keep track of them and ensure that they're unique. for now, I'll update the initialize method to take in both the account number and the balance.
-
+      @account_id = account_id
+      
       if balance >= 0 #TODO: if user enters a non-number for balance, this fails.
         @balance = balance
       else
