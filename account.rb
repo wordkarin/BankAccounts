@@ -55,6 +55,7 @@ module Bank
     def self.find(id)
       #returns an instance of Account where the value of the id field in the CSV matches the passed parameter. note: should use self.all method.
       return self.all[id]
+      #TODO: This uses read_accounts_from_file, so if you later call the method to associate_owner and then find, it won't give you the version of the objects with the owners associated. 
     end
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
@@ -103,8 +104,25 @@ module Bank
     end
 
     # The Account can be created with an owner, OR you can create a method that will add the owner after the Account has already been created.
-    def add_owner(owner)
-        @owner = owner #do I need to figure out how to associate this with the current instance of the account? (would call this method on an account instance.)
+    def add_owner(owner_id) # will call this method on an account instance.
+        @owner = owner_id
+    end
+
+    def self.associate_owner
+      #take in csv file of owner to accounts, add an owner to an account using the owner_id.
+      all_accounts_with_owners = []
+      CSV.read('support/account_owners.csv').each do |match|
+        #use the account_id in the account find method to return the account object
+        account_id = match[0].to_i
+        account = self.find(account_id)
+        #use the owner_id in the owner find method to return the owner object
+        owner_id = match[1].to_i
+        owner = Bank::Owner.find(owner_id)
+        #use add_owner to add the owner to the account.
+        account.add_owner(owner)
+        all_accounts_with_owners << account
+      end
+      return all_accounts_with_owners
     end
   end
 end
