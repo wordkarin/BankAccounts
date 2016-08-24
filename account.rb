@@ -11,9 +11,11 @@ module Bank
 
     # A new account should be created with an ID and an initial balance
     def initialize(account_id, open_date, balance = 0)
-      #TODO: I'm not doing anything with open_date yet, but the data from accounts.csv has it in there, and I may want to initilaize with a default open_date of now.
       #TODO: does not currently ensure unique number. I will probably have the account_id's created somewhere else outside of the initialize method, so that I can keep track of them and ensure that they're unique. for now, I'll update the initialize method to take in both the account number and the balance.
+
       @account_id = account_id
+      @open_date = open_date
+      #TODO: I'm not doing anything with open_date yet, but the data from accounts.csv has it in there, and I may want to initilaize with a default open_date of now.
 
       if balance >= 0 #TODO: if user enters a non-number for balance, this fails.
         @balance = balance
@@ -30,14 +32,15 @@ module Bank
 
     end
 
+    #takes a CSV file of format account id, balance in cents, date opened; outputs an array of the account objects created from that file
     def self.read_accounts_from_file
-      accounts = []
+      accounts = {}
 
       CSV.read("support/accounts.csv").each do |line|
       account_id = line[0].to_i
       balance = line[1].to_i
       open_date = line[2]
-      accounts << self.new(account_id, open_date, balance) #TODO: The initialize method doesn't currently take open_date, but I think the default will be some Date object, like NOW.
+      accounts[account_id] = self.new(account_id, open_date, balance)
       end
 
       return accounts
@@ -45,14 +48,13 @@ module Bank
 
     def self.all
       #returns a collection of Account instances, representing all of the Accounts described in the CSV. See below for the CSV file specifications
-      puts "I'm self.all!"
+      self.read_accounts_from_file
     end
 
     def self.find(id)
-      #returns an instance of Account where the value of the id field in the CSV matches the passed parameter
-      #note: should use self.all method.
-      self.all
-      puts "And I'm self.find!"
+      #returns an instance of Account where the value of the id field in the CSV matches the passed parameter. note: should use self.all method.
+      all_accounts = self.all
+      return all_accounts[id]
     end
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
