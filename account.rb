@@ -8,28 +8,26 @@ module Bank
   class Account
     # Should be able to access the current balance of an account at any time.
     attr_reader :account_id, :balance, :owner_id
+    @@min_balance = 0
 
     # A new account should be created with an ID and an initial balance
-    def initialize(account_id, open_date, balance = 0)
+    def initialize(account_id, open_date, balance)
       #TODO: does not currently ensure unique number. I will probably have the account_id's created somewhere else outside of the initialize method, so that I can keep track of them and ensure that they're unique. for now, I'll update the initialize method to take in both the account number and the balance.
 
       @account_id = account_id
       @open_date = open_date
       #TODO: I'm not doing anything with open_date yet, but the data from accounts.csv has it in there, and I may want to initilaize with a default open_date of now.
 
-      if balance >= 0 #TODO: if user enters a non-number for balance, this fails.
+      if balance >= @@min_balance #TODO: if user enters a non-number for balance, this fails.
         @balance = balance
       else
         begin
-          # A new account cannot be created with initial negative balance - this will raise an ArgumentError
-          raise neg_starting_balance = ArgumentError.new("You cannot create an account with a negative balance. Your account was created with a balance of 0. If you meant to create an account with a positive balance, please make a deposit now.")
-        rescue
-          puts neg_starting_balance.message
-          @balance = 0 #This rescue creates the account object with a zero balance. Maybe want to not create an account if the balance is negative?
+          # A new account cannot be created with balance lower than the minimum - this will raise an ArgumentError
+          raise ArgumentError.new("You cannot create an account with a balance below #{ @@min_balance }. Please make a deposit of #{ @@min_balance } or greater.")
+        rescue Exception => error #The problem with this argument error/rescue block is that if someone tries to create an account with a lower than min balance, the method still executes with the min balance
+          puts error.message
         end
       end
-
-
     end
 
     #takes a CSV file of format account id, balance in cents, date opened; outputs an array of the account objects created from that file
@@ -37,10 +35,10 @@ module Bank
       accounts = {}
 
       CSV.read("support/accounts.csv").each do |line|
-      account_id = line[0].to_i
-      balance = line[1].to_i
-      open_date = line[2]
-      accounts[account_id] = self.new(account_id, open_date, balance)
+        account_id = line[0].to_i
+        balance = line[1].to_i
+        open_date = line[2]
+        accounts[account_id] = self.new(account_id, open_date, balance)
       end
 
       return accounts
@@ -55,7 +53,7 @@ module Bank
     def self.find(id)
       #returns an instance of Account where the value of the id field in the CSV matches the passed parameter. note: should use self.all method.
       return self.all[id]
-      #TODO: This uses read_accounts_from_file, so if you later call the method to associate_owner and then find, it won't give you the version of the objects with the owners associated. 
+      #TODO: This uses read_accounts_from_file, so if you later call the method to associate_owner and then find, it won't give you the version of the objects with the owners associated.
     end
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
@@ -95,9 +93,9 @@ module Bank
         @balance += amount
       else
         begin
-          raise pos_deposit = ArgumentError.new("Deposits require a positive amount.")
-        rescue
-          puts pos_deposit.message
+          raise ArgumentError.new("Deposits require a positive amount.")
+        rescue Exception => error
+          puts error.message
         end
       end
       return @balance
