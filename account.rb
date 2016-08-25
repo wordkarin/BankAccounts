@@ -6,7 +6,7 @@ require_relative 'owner'
 module Bank
   # Create an Account class which should have the following functionality:
   class Account
-    @@min_balance = 0 #this is valid across all instances of the class.
+    MIN_BALANCE = 0 #this is valid across all instances of the class.
     # Should be able to access the current balance of an account at any time.
     attr_reader :account_id, :balance, :owner_id
 
@@ -17,13 +17,13 @@ module Bank
       @account_id = account_id
       @open_date = open_date
       #TODO: I'm not doing anything with open_date yet, but the data from accounts.csv has it in there, and I may want to initilaize with a default open_date of now.
-      puts @@min_balance
-      if balance >= @@min_balance #TODO: if user enters a non-number for balance, this fails.
+      puts self.class::MIN_BALANCE
+      if balance >= self.class::MIN_BALANCE #TODO: if user enters a non-number for balance, this fails.
         @balance = balance
       else
         begin
           # A new account cannot be created with balance lower than the minimum - this will raise an ArgumentError
-          raise ArgumentError.new("You cannot create an account with a balance below #{ @@min_balance }.")
+          raise ArgumentError.new("You cannot create an account with a balance below #{ self.class::MIN_BALANCE }.")
         # rescue Exception => error
         #   puts error.message
           # The problem with this argument error/rescue block is that if someone tries to create an account with a lower than min balance, and I want to rescue it but not create the account. For now I'll just throw the exception and not rescue, so that I don't end up with accounts with no balance. Another option is to rescue and set the balance to 0 and tell the user to immediately deposit the min balance.
@@ -64,7 +64,7 @@ module Bank
       # Withdraw should also not accept a negative number as the amount.
       total_withdrawl = amount + fee
 
-      if amount > 0 && total_withdrawl + @@min_balance <= @balance
+      if amount > 0 && total_withdrawl + self.class::MIN_BALANCE <= @balance
         @balance -= total_withdrawl
       elsif amount < 0
         begin
@@ -72,7 +72,7 @@ module Bank
         rescue
           puts neg_withdraw.message
         end
-      elsif total_withdrawl + @@min_balance > @balance
+      elsif total_withdrawl + self.class::MIN_BALANCE > @balance
         begin
           raise amount_exceeds_balance = ArgumentError.new("You do not have enough money to withdraw #{amount}.")
         rescue

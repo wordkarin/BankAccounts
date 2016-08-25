@@ -1,7 +1,7 @@
 require_relative 'account'
 module Bank
   class SavingsAccount < Account
-    @@min_balance = 1000 #this is valid across all instances of this class.
+    MIN_BALANCE = 1000 #this is valid across all instances of this class.
 
     def initialize(account_id, open_date, amount)
       # The initial balance cannot be less than $10. If it is, this will raise an ArgumentError
@@ -20,7 +20,7 @@ module Bank
       #add_interest(rate): Calculate the interest on the balance and add the interest to the balance. Return the interest that was calculated and added to the balance (not the updated balance).
       # Input rate is assumed to be a percentage (i.e. 0.25).
 
-      interest = (@balance * rate/100).to_i #want to ensure whole cent values. 
+      interest = (@balance * rate/100).to_i #want to ensure whole cent values.
       @balance = @balance + interest
 
       return interest
