@@ -59,7 +59,7 @@ module Bank
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
     def withdraw(amount, fee = 0)
-      # If we set a default fee to be 0, then we can change the fee based on what kind of account/withdrawl is made.
+      # If we set a default fee to be 0, then we can change the fee based on what kind of account/withdrawl is made by the child classes.
       # The withdraw method does not allow the account to go negative - Will output a warning message and return the original un-modified balance
       # Withdraw should also not accept a negative number as the amount.
       total_withdrawl = amount + fee
