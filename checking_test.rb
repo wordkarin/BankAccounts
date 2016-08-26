@@ -64,6 +64,8 @@ ch = Bank::CheckingAccount.new(1212, 2014, 1000)
 end
 
 ch.reset_checks
+puts ch.inspect
+
 #does not incur check fee.
 ch.withdraw_using_check(100)
 puts ch.inspect
