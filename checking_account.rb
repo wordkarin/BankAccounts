@@ -13,7 +13,7 @@ module Bank
       # Does not allow the account to go negative. Will output a warning message and return the original un-modified balance.
     end
 
-    def withdraw_with_check(amount)
+    def withdraw_using_check(amount)
       # #withdraw_using_check(amount): The input amount gets taken out of the account as a result of a check withdrawal. Returns the updated account balance.
       #will call withdraw()
       #does not incur 100 ($1) fee for normal withdrawls

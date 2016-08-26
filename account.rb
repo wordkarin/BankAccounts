@@ -74,7 +74,7 @@ module Bank
         end
       elsif total_withdrawl + self.class::MIN_BALANCE > @balance
         begin
-          raise amount_exceeds_balance = ArgumentError.new("You do not have enough money to withdraw #{amount}.")
+          raise amount_exceeds_balance = ArgumentError.new("You do not have enough money to withdraw #{amount} and stay above the #{ self.class::MIN_BALANCE } requirement.")
         rescue
           puts amount_exceeds_balance.message
         end
