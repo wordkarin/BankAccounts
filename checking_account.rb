@@ -2,6 +2,7 @@ require_relative 'account'
 
 module Bank
   class CheckingAccount < Account
+    attr_reader :checks_used
     alias_method :account_withdraw, :withdraw #allows me to access the withdraw method from Account instead of CheckingAccount, by calling it :account_withdraw.
 
     MIN_OPEN = 0 #probably don't need this, it's the same as the parent class
@@ -30,7 +31,7 @@ module Bank
       else
         account_withdraw(amount, 200, self.class::OVERDRAFT)
       end
-      @checks_used += 1 #TODO: a check is still incremented if the withdraw fails. This could be by design or I might want to change it. I'm leaving for now. 
+      @checks_used += 1 #TODO: a check is still incremented if the withdraw fails. This could be by design or I might want to change it. I'm leaving for now.
     end
 
     def reset_checks

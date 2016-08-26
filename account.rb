@@ -24,7 +24,7 @@ module Bank
       else
         begin
           # A new account cannot be created with balance lower than the minimum - this will raise an ArgumentError
-          raise ArgumentError.new("You cannot create an account with a balance below #{ self.class::MIN_OPEN }.")
+          raise ArgumentError.new(sprintf("You cannot create an account with a balance below $%0.02f.",self.class::MIN_OPEN/100.to_f))
         # rescue Exception => error
         #   puts error.message
           # The problem with this argument error/rescue block is that if someone tries to create an account with a lower than min balance, and I want to rescue it but not create the account. For now I'll just throw the exception and not rescue, so that I don't end up with accounts with no balance. Another option is to rescue and set the balance to 0 and tell the user to immediately deposit the min balance.
@@ -76,7 +76,7 @@ module Bank
         end
       elsif total_withdrawl + min_balance  > @balance
         begin
-          raise ArgumentError.new("You do not have enough money to withdraw #{amount} and stay above the #{ min_balance } requirement.")
+          raise ArgumentError.new(sprintf("You do not have enough money to withdraw $%0.02f and stay above the $%0.02f requirement.", amount/100.to_f, min_balance/100.to_f))
         rescue Exception => error
           puts error.message
         end
