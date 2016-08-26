@@ -12,7 +12,7 @@ module Bank
 
     # A new account should be created with an ID and an initial balance
     def initialize(account_id, open_date, balance)
-      #TODO: does not currently ensure unique number. I will probably have the account_id's created somewhere else outside of the initialize method, so that I can keep track of them and ensure that they're unique. for now, I'll update the initialize method to take in both the account number and the balance.
+      #TODO: does not currently ensure unique number. account_ids should be created outside of the account.
 
       @account_id = account_id
       @open_date = open_date
@@ -59,7 +59,7 @@ module Bank
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
     def withdraw(amount, fee = 0)
-      # If we set a default fee to be 0, then we can change the fee based on what kind of account/withdrawl is made by the child classes.
+      # Default fee is 0. Child classes and their methods may modify the fee. I may want to be able to print the fee at some time - not sure how to do that this way, may need to define fee separately. 
       # The withdraw method does not allow the account to go negative - Will output a warning message and return the original un-modified balance
       # Withdraw should also not accept a negative number as the amount.
       total_withdrawl = amount + fee
@@ -68,21 +68,21 @@ module Bank
         @balance -= total_withdrawl
       elsif amount < 0
         begin
-          raise neg_withdraw = ArgumentError.new("You cannot withdraw a negative amount.")
-        rescue
-          puts neg_withdraw.message
+          raise ArgumentError.new("You cannot withdraw a negative amount.")
+        rescue Exception => error
+          puts error.message
         end
       elsif total_withdrawl + self.class::MIN_BALANCE > @balance
         begin
-          raise amount_exceeds_balance = ArgumentError.new("You do not have enough money to withdraw #{amount} and stay above the #{ self.class::MIN_BALANCE } requirement.")
-        rescue
-          puts amount_exceeds_balance.message
+          raise ArgumentError.new("You do not have enough money to withdraw #{amount} and stay above the #{ self.class::MIN_BALANCE } requirement.")
+        rescue Exception => error
+          puts error.message
         end
       else
         begin
-          raise zero_amount = ArgumentError.new("Withdraws require a non-zero amount.")
-        rescue
-          puts zero_amount.message
+          raise ArgumentError.new("Withdraws require a non-zero amount.")
+        rescue Exception => error
+          puts error.message
         end
       end
 

@@ -7,9 +7,10 @@ module Bank
       @checks_used = 0
     end
 
-    def withdraw(amount, fee)
+    def withdraw(amount)
       # Updated withdrawal functionality:
       # Each withdrawal 'transaction' incurs a fee of $1 that is taken out of the balance. Returns the updated account balance
+      fee = 1
       # Does not allow the account to go negative. Will output a warning message and return the original un-modified balance.
     end
 
