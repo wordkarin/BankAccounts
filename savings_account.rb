@@ -1,7 +1,8 @@
 require_relative 'account'
 module Bank
   class SavingsAccount < Account
-    MIN_BALANCE = 1000 #this is valid across all instances of this class.
+    MIN_OPEN = 1000
+    MIN_BALANCE = MIN_OPEN #this is valid across all instances of this class.
 
     def initialize(account_id, open_date, amount)
       # The initial balance cannot be less than $10. If it is, this will raise an ArgumentError

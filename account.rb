@@ -6,7 +6,8 @@ require_relative 'owner'
 module Bank
   # Create an Account class which should have the following functionality:
   class Account
-    MIN_BALANCE = 0 #this is valid across all instances of the class.
+    MIN_OPEN = 0
+    MIN_BALANCE = MIN_OPEN #this is valid across all instances of the class.
     # Should be able to access the current balance of an account at any time.
     attr_reader :account_id, :balance, :owner_id
 
@@ -17,13 +18,13 @@ module Bank
       @account_id = account_id
       @open_date = open_date
       #TODO: I'm not doing anything with open_date yet, but the data from accounts.csv has it in there, and I may want to initilaize with a default open_date of now.
-      puts self.class::MIN_BALANCE
-      if balance >= self.class::MIN_BALANCE #TODO: if user enters a non-number for balance, this fails.
+      puts self.class::MIN_OPEN
+      if balance >= self.class::MIN_OPEN #TODO: if user enters a non-number for balance, this fails.
         @balance = balance
       else
         begin
           # A new account cannot be created with balance lower than the minimum - this will raise an ArgumentError
-          raise ArgumentError.new("You cannot create an account with a balance below #{ self.class::MIN_BALANCE }.")
+          raise ArgumentError.new("You cannot create an account with a balance below #{ self.class::MIN_OPEN }.")
         # rescue Exception => error
         #   puts error.message
           # The problem with this argument error/rescue block is that if someone tries to create an account with a lower than min balance, and I want to rescue it but not create the account. For now I'll just throw the exception and not rescue, so that I don't end up with accounts with no balance. Another option is to rescue and set the balance to 0 and tell the user to immediately deposit the min balance.
@@ -58,8 +59,8 @@ module Bank
     end
 
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
-    def withdraw(amount, fee = 0)
-      # Default fee is 0. Child classes and their methods may modify the fee. I may want to be able to print the fee at some time - not sure how to do that this way, may need to define fee separately. 
+    def withdraw(amount, fee = 0, min_balance = self.class::MIN_BALANCE)
+      # Default fee is 0. Child classes and their methods may modify the fee. I may want to be able to print the fee at some time - not sure how to do that this way, may need to define fee separately.
       # The withdraw method does not allow the account to go negative - Will output a warning message and return the original un-modified balance
       # Withdraw should also not accept a negative number as the amount.
       total_withdrawl = amount + fee
