@@ -7,7 +7,7 @@ module Bank
   # Create an Account class which should have the following functionality:
   class Account
     MIN_OPEN = 0
-    MIN_BALANCE = MIN_OPEN #this is valid across all instances of the class.
+    MIN_BALANCE = 0 #this is valid across all instances of the class.
     # Should be able to access the current balance of an account at any time.
     attr_reader :account_id, :balance, :owner_id
 
@@ -61,11 +61,12 @@ module Bank
     # Should have a withdraw method that accepts a single parameter which represents the amount of money that will be withdrawn. This method should return the updated account balance.
     def withdraw(amount, fee = 0, min_balance = self.class::MIN_BALANCE)
       # Default fee is 0. Child classes and their methods may modify the fee. I may want to be able to print the fee at some time - not sure how to do that this way, may need to define fee separately.
+      # min balance is by default the min balance for the class.
       # The withdraw method does not allow the account to go negative - Will output a warning message and return the original un-modified balance
       # Withdraw should also not accept a negative number as the amount.
       total_withdrawl = amount + fee
 
-      if amount > 0 && total_withdrawl + self.class::MIN_BALANCE <= @balance
+      if amount > 0 && total_withdrawl + min_balance  <= @balance
         @balance -= total_withdrawl
       elsif amount < 0
         begin
@@ -73,9 +74,9 @@ module Bank
         rescue Exception => error
           puts error.message
         end
-      elsif total_withdrawl + self.class::MIN_BALANCE > @balance
+      elsif total_withdrawl + min_balance  > @balance
         begin
-          raise ArgumentError.new("You do not have enough money to withdraw #{amount} and stay above the #{ self.class::MIN_BALANCE } requirement.")
+          raise ArgumentError.new("You do not have enough money to withdraw #{amount} and stay above the #{ min_balance } requirement.")
         rescue Exception => error
           puts error.message
         end
